@@ -2,19 +2,26 @@
 
 A responsive product image gallery with lightbox. No libraries or dependencies, just TypeScript compiled down to plain JavaScript.
 
+
 ## Running it
 
+### Online:
+index.html should be runnable from straight from this git repo: https://raw.githack.com/Ukubot/LightBoxGallery/refs/heads/main/index.html
+### Locally:
 Run `npm install` to get TypeScript, then `npx tsc` to compile, then open `index.html`.
 
 ---
 
 ## How it works
-
-On mobile it's simple — prev/next arrows to cycle through images. 
-On desktop, thumbnails appear below and clicking the main image opens a lightbox. 
+#### On mobile: prev/next arrows to cycle through images.
+#### On desktop: thumbnails appear below and clicking the main image opens a lightbox. 
 The switch between the two modes is driven by `matchMedia()` at 768px, which is configurable.
-
 Note: the lightbox trigger button is `display: none` on mobile, not just hidden. That removes it from the accessibility tree entirely, so keyboard users on mobile never tab onto a button that doesn't do anything.
+
+---
+<img width="513" height="504" alt="image" src="https://github.com/user-attachments/assets/d7a18327-82d7-4c65-86a7-50b086ca9376" />
+<img width="626" height="636" alt="image" src="https://github.com/user-attachments/assets/d6b871cc-cc35-4ad7-a8d4-4f125a5b5013" />
+<img width="841" height="1100" alt="image" src="https://github.com/user-attachments/assets/678ac053-e321-4503-898a-1047ae0e9366" />
 
 ---
 
@@ -22,13 +29,13 @@ Note: the lightbox trigger button is `display: none` on mobile, not just hidden.
 
 This was treated as a proper requirement, not a checkbox. A few things that are easy to miss:
 
-**Keyboard** — Arrow keys navigate images inside the lightbox, Escape closes it, and Tab is fully trapped inside the dialog so you can't accidentally tab onto the page behind it.
+**Keyboard** - Arrow keys navigate images inside the lightbox, Escape closes it, and Tab is fully trapped inside the dialog so you can't accidentally tab onto the page behind it.
 
-**Focus** — Opening the lightbox moves focus to the close button. Closing it returns focus to wherever you came from.
+**Focus** - Opening the lightbox moves focus to the close button. Closing it returns focus to wherever you came from.
 
-**Screen readers** — There's an off-screen live region that announces things like "Image 2 of 4" every time you navigate. It uses `requestAnimationFrame` to delay the announcement slightly, otherwise some screen readers skip it if the DOM hasn't settled yet. Thumbnail images have empty `alt` and `aria-hidden` since the button wrapping them already has a label — announcing both would be redundant.
+**Screen readers** - There's an off-screen live region that announces things like "Image 2 of 4" every time you navigate. It uses `requestAnimationFrame` to delay the announcement slightly, otherwise some screen readers skip it if the DOM hasn't settled yet. Thumbnail images have empty `alt` and `aria-hidden` since the button wrapping them already has a label — announcing both would be redundant.
 
-**Reduced motion** — Transitions are turned off via `prefers-reduced-motion`.
+**Reduced motion** - Transitions are turned off via `prefers-reduced-motion`.
 
 ---
 
