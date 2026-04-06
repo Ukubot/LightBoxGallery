@@ -6,7 +6,7 @@ A responsive product image gallery with lightbox. No libraries or dependencies, 
 ## Running it
 
 ### Online:
-index.html should be runnable from straight from this git repo: https://raw.githack.com/Ukubot/LightBoxGallery/refs/heads/main/index.html
+index.html should be runnable straight from this same git repo: https://raw.githack.com/Ukubot/LightBoxGallery/refs/heads/main/index.html
 ### Locally:
 Run `npm install` to get TypeScript, then `npx tsc` to compile, then open `index.html`.
 
