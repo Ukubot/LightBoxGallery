@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "strict": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "rootDir": ".",
+    "sourceMap": false
+  },
+  "include": ["gallery.ts"],
+  "exclude": ["node_modules"]
+}

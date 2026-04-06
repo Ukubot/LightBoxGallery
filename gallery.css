@@ -1,0 +1,246 @@
+:root {
+  --gallery-clr-accent: hsl(26, 100%, 55%);
+  --gallery-clr-dark: hsl(220, 13%, 13%);
+  --gallery-clr-white: hsl(0, 0%, 100%);
+  --gallery-clr-backdrop: hsla(0, 0%, 0%, 0.75);
+
+  --gallery-radius-img: 1rem;
+  --gallery-radius-thumb: 0.625rem;
+  --gallery-thumb-size: 5.5rem;
+  --gallery-thumb-border: 3px;
+
+  --gallery-nav-size: 2.75rem; /* 44px — WCAG 2.5.5 touch target */
+  --gallery-nav-size-lb: 3.5rem;
+
+  --gallery-dialog-width: 40rem;
+  --gallery-z-lightbox: 100;
+  --gallery-transition: 0.15s ease;
+}
+
+/* before JS runs, just show the images stacked */
+product-gallery:not(:defined) > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.gallery__nav:focus-visible,
+.gallery__thumb:focus-visible,
+.gallery__lightbox-close:focus-visible,
+.gallery__lightbox-trigger:focus-visible {
+  outline: 3px solid var(--gallery-clr-accent);
+  outline-offset: 3px;
+}
+
+product-gallery {
+  display: block; /* custom elements are inline by default */
+  width: 100%;
+  isolation: isolate; /* keeps lightbox z-index contained */
+}
+
+/* visually hidden but still announced by screen readers */
+.gallery__announcer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.gallery__stage,
+.gallery__lightbox-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gallery__frame {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden; /* clips image to border-radius on mobile */
+}
+
+.gallery__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gallery__img.is-broken,
+.gallery__lightbox-img.is-broken {
+  aspect-ratio: 1;
+  background: hsl(220, 13%, 93%);
+}
+
+/* display:none also removes this from the accessibility tree on mobile */
+.gallery__lightbox-trigger {
+  display: none;
+}
+
+.gallery__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--gallery-nav-size);
+  height: var(--gallery-nav-size);
+  border-radius: 50%;
+  border: none;
+  background: var(--gallery-clr-white);
+  color: var(--gallery-clr-dark);
+  cursor: pointer;
+  transition: color var(--gallery-transition);
+}
+
+.gallery__nav:hover {
+  color: var(--gallery-clr-accent);
+}
+
+.gallery__stage .gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.gallery__stage .gallery__nav--prev { left: 1rem; }
+.gallery__stage .gallery__nav--next { right: 1rem; }
+
+.gallery__thumbs {
+  display: none;
+}
+
+/*
+  Border is on the <button> so it's never clipped by the image's border-radius.
+  The inner radius is slightly smaller to account for the border width.
+*/
+.gallery__thumb {
+  padding: 0;
+  border: var(--gallery-thumb-border) solid transparent;
+  border-radius: calc(var(--gallery-radius-thumb) + var(--gallery-thumb-border));
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+  transition: border-color var(--gallery-transition);
+}
+
+.gallery__thumb img {
+  display: block;
+  width: var(--gallery-thumb-size);
+  height: var(--gallery-thumb-size);
+  object-fit: cover;
+  border-radius: var(--gallery-radius-thumb);
+  transition: opacity var(--gallery-transition);
+}
+
+.gallery__thumb--active { border-color: var(--gallery-clr-accent); }
+.gallery__thumb--active img { opacity: 0.4; }
+.gallery__thumb:not(.gallery__thumb--active):hover img { opacity: 0.7; }
+
+.gallery__lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: var(--gallery-z-lightbox);
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery__lightbox--open { display: flex; }
+
+.gallery__lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--gallery-clr-backdrop);
+  cursor: pointer;
+}
+
+.gallery__lightbox-dialog {
+  position: relative;
+  z-index: 1;
+  /* padding makes room for the arrows that protrude outside the dialog */
+  width: min(var(--gallery-dialog-width), 100vw);
+  padding: 0 calc(var(--gallery-nav-size-lb) / 2);
+}
+
+.gallery__lightbox-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.gallery__lightbox-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--gallery-nav-size);
+  min-height: var(--gallery-nav-size);
+  padding: 0.25rem;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--gallery-clr-white);
+  cursor: pointer;
+  transition: color var(--gallery-transition);
+}
+
+.gallery__lightbox-close:hover {
+  color: var(--gallery-clr-accent);
+}
+
+.gallery__lightbox-img {
+  flex: 1;
+  min-width: 0;
+  height: auto;
+  border-radius: var(--gallery-radius-img);
+}
+
+/* negative offset = half the button size, so arrows sit half outside the dialog */
+.gallery__lightbox-stage .gallery__nav {
+  position: absolute;
+  top: 50%;
+  width: var(--gallery-nav-size-lb);
+  height: var(--gallery-nav-size-lb);
+  transform: translateY(-50%);
+}
+
+.gallery__lightbox-stage .gallery__nav--prev { left: calc(var(--gallery-nav-size-lb) / -2); }
+.gallery__lightbox-stage .gallery__nav--next { right: calc(var(--gallery-nav-size-lb) / -2); }
+
+.gallery__lightbox-thumbs {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+  .gallery__stage .gallery__nav { display: none; }
+  .gallery__frame { overflow: visible; }
+  .gallery__img { border-radius: var(--gallery-radius-img); cursor: zoom-in; }
+  .gallery__thumbs { display: flex; gap: 1.5rem; margin-top: 2rem; }
+
+  .gallery__lightbox-trigger {
+    display: block;
+    position: absolute;
+    inset: 0;
+    border: none;
+    background: transparent;
+    cursor: zoom-in;
+    border-radius: var(--gallery-radius-img);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__nav,
+  .gallery__thumb,
+  .gallery__thumb img,
+  .gallery__lightbox-close {
+    transition: none;
+  }
+}
